@@ -125,11 +125,11 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 	r.output = func() string {
 		shorten := func(s string) string {
 			ss := strings.Split(s, "\n")
-			if len(ss) > 300 {
-				output := ss[0:200]
+			if len(ss) > 500 {
+				output := ss[0:250]
 				output = append(output,
-					fmt.Sprintf("...(%d lines skipped)...", len(ss)-300))
-				output = append(output, ss[len(ss)-100:]...)
+					fmt.Sprintf("...(%d lines skipped)...", len(ss)-500))
+				output = append(output, ss[len(ss)-250:]...)
 				return strings.Join(output, "\n")
 			}
 			return s

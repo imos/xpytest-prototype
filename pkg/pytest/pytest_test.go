@@ -197,8 +197,8 @@ func TestPytestWithLongOutput(t *testing.T) {
 	} else if s := r.Summary(); s !=
 		"[FAILED] test_foo.py (1 failed, 23 passed in 4.5 seconds)" {
 		t.Fatalf("unexpected summary: %s", s)
-	} else if ss := strings.Split(r.Output(), "\n"); len(ss) != 302 &&
-		ss[201] != "...(701 lines skipped)..." {
+	} else if ss := strings.Split(r.Output(), "\n"); len(ss) != 502 &&
+		ss[251] != "...(701 lines skipped)..." {
 		t.Fatalf("unexpected output: %d: %s", len(ss), ss)
 	}
 }
