@@ -13,10 +13,10 @@ import (
 
 	"github.com/bmatcuk/doublestar"
 
-	"github.com/pfnet-research/xpytest/pkg/pytest"
-	"github.com/pfnet-research/xpytest/pkg/reporter"
-	"github.com/pfnet-research/xpytest/pkg/resourcebuckets"
-	xpytest_proto "github.com/pfnet-research/xpytest/proto"
+	"github.com/chainer/xpytest/pkg/pytest"
+	"github.com/chainer/xpytest/pkg/reporter"
+	"github.com/chainer/xpytest/pkg/resourcebuckets"
+	xpytest_proto "github.com/chainer/xpytest/proto"
 )
 
 // Xpytest is a controller for pytest queries.

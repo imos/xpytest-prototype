@@ -1,4 +1,4 @@
-module github.com/pfnet-research/xpytest
+module github.com/chainer/xpytest
 
 require (
 	github.com/bmatcuk/doublestar v1.1.1

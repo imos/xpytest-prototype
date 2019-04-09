@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pfnet-research/xpytest/pkg/pytest"
-	xpytest_proto "github.com/pfnet-research/xpytest/proto"
+	"github.com/chainer/xpytest/pkg/pytest"
+	xpytest_proto "github.com/chainer/xpytest/proto"
 )
 
 func TestExecute(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	xpytest_proto "github.com/pfnet-research/xpytest/proto"
+	xpytest_proto "github.com/chainer/xpytest/proto"
 )
 
 // LoadHintFile loads hint information from a hint file.

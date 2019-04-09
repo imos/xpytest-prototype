@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/pfnet-research/xpytest/pkg/reporter"
+	"github.com/chainer/xpytest/pkg/reporter"
 )
 
 var credential = flag.String(

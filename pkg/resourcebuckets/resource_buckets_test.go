@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pfnet-research/xpytest/pkg/resourcebuckets"
+	"github.com/chainer/xpytest/pkg/resourcebuckets"
 )
 
 func TestResourceBuckets(t *testing.T) {

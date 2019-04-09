@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	xpytest_proto "github.com/pfnet-research/xpytest/proto"
+	xpytest_proto "github.com/chainer/xpytest/proto"
 )
 
 // Execute executes a command.

@@ -7,11 +7,11 @@ import (
 	"os"
 	"time"
 
-	xpytest_proto "github.com/pfnet-research/xpytest/proto"
+	xpytest_proto "github.com/chainer/xpytest/proto"
 
-	"github.com/pfnet-research/xpytest/pkg/pytest"
-	"github.com/pfnet-research/xpytest/pkg/reporter"
-	"github.com/pfnet-research/xpytest/pkg/xpytest"
+	"github.com/chainer/xpytest/pkg/pytest"
+	"github.com/chainer/xpytest/pkg/reporter"
+	"github.com/chainer/xpytest/pkg/xpytest"
 )
 
 var python = flag.String("python", "python3", "python command")

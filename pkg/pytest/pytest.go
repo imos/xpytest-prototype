@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	xpytest_proto "github.com/pfnet-research/xpytest/proto"
+	xpytest_proto "github.com/chainer/xpytest/proto"
 )
 
 // Pytest represents one pytest execution.
