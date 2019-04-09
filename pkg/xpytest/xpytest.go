@@ -164,6 +164,9 @@ func (x *Xpytest) Execute(
 			pt := *x.PytestBase
 			pt.Files = []string{t.File}
 			pt.Xdist = int(t.Xdist)
+			if pt.Xdist > thread {
+				pt.Xdist = thread
+			}
 			if t.Retry != 0 {
 				pt.Retry = int(t.Retry)
 			}
