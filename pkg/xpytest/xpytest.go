@@ -171,8 +171,7 @@ func (x *Xpytest) Execute(
 				}()),
 			}
 			if t.Deadline != 0 {
-				pt.Deadline =
-					time.Duration(t.Deadline*100000) * time.Microsecond
+				pt.Deadline = time.Duration(t.Deadline*1e6) * time.Microsecond
 			}
 			r, err := pt.Execute(ctx)
 			if err != nil {

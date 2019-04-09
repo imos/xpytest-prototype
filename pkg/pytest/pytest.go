@@ -111,14 +111,17 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 			r.Status = xpytest_proto.TestResult_SUCCESS
 		}
 	}
+	ext := ""
+	if p.Xdist > 0 {
+		ext += fmt.Sprintf(" * %d procs", p.Xdist)
+	}
 	r.duration = tr.GetTime()
 	r.summary = func() string {
 		output := r.Name
-		if result != "" {
-			output += fmt.Sprintf(" (%s)", result)
-		}
 		if r.Status == xpytest_proto.TestResult_TIMEOUT {
-			output += fmt.Sprintf(" (%.0f seconds)", r.duration)
+			output += fmt.Sprintf(" (%.0f seconds%s)", r.duration, ext)
+		} else if result != "" {
+			output += fmt.Sprintf(" (%s%s)", result, ext)
 		}
 		return output
 	}()

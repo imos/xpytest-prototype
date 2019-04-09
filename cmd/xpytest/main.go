@@ -51,6 +51,12 @@ func main() {
 		r.Log(ctx, fmt.Sprintf("Time: %s", time.Now()))
 	}
 
+	for _, arg := range flag.Args() {
+		if err := xt.AddTestsWithFilePattern(arg); err != nil {
+			panic(fmt.Sprintf("failed to add tests: %s", err))
+		}
+	}
+
 	if *hint != "" {
 		if h, err := xpytest.LoadHintFile(*hint); err != nil {
 			panic(fmt.Sprintf(
@@ -58,12 +64,6 @@ func main() {
 				*hint, err))
 		} else if err := xt.ApplyHint(h); err != nil {
 			panic(fmt.Sprintf("failed to apply hint: %s", err))
-		}
-	}
-
-	for _, arg := range flag.Args() {
-		if err := xt.AddTestsWithFilePattern(arg); err != nil {
-			panic(fmt.Sprintf("failed to add tests: %s", err))
 		}
 	}
 
