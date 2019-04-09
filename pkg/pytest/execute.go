@@ -17,6 +17,7 @@ import (
 func Execute(
 	ctx context.Context, args []string, deadline time.Duration, env []string,
 ) (*xpytest_proto.TestResult, error) {
+	startTime := time.Now()
 	result := &xpytest_proto.TestResult{}
 
 	// Prepare a Cmd object.
@@ -93,5 +94,7 @@ func Execute(
 	} else {
 		result.Status = xpytest_proto.TestResult_FAILED
 	}
+
+	result.Time = float32(time.Now().Sub(startTime)) / float32(time.Second)
 	return result, nil
 }

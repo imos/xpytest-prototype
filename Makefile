@@ -27,5 +27,15 @@ generated/proto:
 bin:
 	mkdir -p bin
 
-bin/%: bin proto
-	go build -o bin/$* ./cmd/$*
+bin/%-linux: bin proto
+	GOOS=linux GOARCH=amd64 go build -o bin/$*-linux ./cmd/$*
+	gzip -f -k bin/$*-linux
+.PRECIOUS: bin/%-linux
+
+bin/%-darwin: bin proto
+	GOOS=darwin GOARCH=amd64 go build -o bin/$*-darwin ./cmd/$*
+	gzip -f -k bin/$*-darwin
+.PRECIOUS: bin/%-darwin
+
+bin/%: bin/%-linux bin/%-darwin
+	ln -f -s $*-$$(uname | tr '[A-Z]' '[a-z]') bin/$*

@@ -24,6 +24,7 @@ type Xpytest struct {
 	PytestBase  *pytest.Pytest
 	Tests       []*xpytest_proto.TestQuery
 	TestResults []*xpytest_proto.TestResult
+	Status      xpytest_proto.TestResult_Status
 }
 
 // NewXpytest creates a new Xpytest.
@@ -121,6 +122,7 @@ func (x *Xpytest) Execute(
 				failedTests = append(failedTests, r)
 			}
 		}
+		x.Status = xpytest_proto.TestResult_SUCCESS
 		if len(flakyTests) > 0 {
 			fmt.Printf("\n%s\n", horizon("FLAKY TESTS"))
 			for _, t := range flakyTests {
@@ -129,12 +131,14 @@ func (x *Xpytest) Execute(
 					reporter.Log(ctx, t.Summary())
 				}
 			}
+			x.Status = xpytest_proto.TestResult_FLAKY
 		}
 		if len(failedTests) > 0 {
 			fmt.Printf("\n%s\n", horizon("FAILED TESTS"))
 			for _, t := range failedTests {
 				fmt.Printf("%s\n", t.Summary())
 			}
+			x.Status = xpytest_proto.TestResult_FAILED
 		}
 		fmt.Printf("\n%s\n", horizon("TEST SUMMARY"))
 		fmt.Printf("%d failed, %d flaky, %d passed\n",

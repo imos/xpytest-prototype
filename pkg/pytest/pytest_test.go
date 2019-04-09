@@ -59,6 +59,27 @@ func TestPytest(t *testing.T) {
 	}
 }
 
+func TestPytestWithXdist(t *testing.T) {
+	ctx := context.Background()
+	p := pytest.NewPytest("python3")
+	executor := &pytestExecutor{
+		TestResult: &xpytest_proto.TestResult{
+			Status: xpytest_proto.TestResult_SUCCESS,
+			Stdout: "=== 123 passed in 4.56 seconds ===",
+		},
+	}
+	p.Executor = executor.Execute
+	p.Files = []string{"test_foo.py"}
+	p.Deadline = time.Minute
+	p.Xdist = 4
+	if _, err := p.Execute(ctx); err != nil {
+		t.Fatalf("failed to execute: %s", err)
+	} else if strings.Join(executor.Args, ",") !=
+		"python3,-m,pytest,-n,4,test_foo.py" {
+		t.Fatalf("unexpected args: %s", executor.Args)
+	}
+}
+
 func TestPytestWhenAllTestsAreDeselected(t *testing.T) {
 	ctx := context.Background()
 	p := pytest.NewPytest("python3")

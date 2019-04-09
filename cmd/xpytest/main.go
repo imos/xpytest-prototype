@@ -4,7 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
 	"time"
+
+	xpytest_proto "github.com/pfnet-research/xpytest/proto"
 
 	"github.com/pfnet-research/xpytest/pkg/pytest"
 	"github.com/pfnet-research/xpytest/pkg/reporter"
@@ -66,5 +69,9 @@ func main() {
 
 	if err := xt.Execute(ctx, *bucket, *thread, r); err != nil {
 		panic(fmt.Sprintf("failed to execute: %s", err))
+	}
+
+	if xt.Status != xpytest_proto.TestResult_SUCCESS {
+		os.Exit(1)
 	}
 }
