@@ -3,7 +3,7 @@
 set -uex
 
 gsutil cp \
-    gs://distribution-pfn-private-ci/archive/go/go1.12.linux-amd64.tar.gz \
+    gs://ro-pfn-public-ci/package/go/go1.12.linux-amd64.tar.gz \
     go.tar.gz
 tar -xf go.tar.gz
 rm -rf /usr/local/go || true
