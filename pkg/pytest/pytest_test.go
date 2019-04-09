@@ -126,7 +126,8 @@ func TestPytestWithFlakyTest(t *testing.T) {
 	if r, err := p.Execute(ctx); err != nil {
 		t.Fatalf("failed to execute: %s", err)
 	} else if s := r.Summary(); s !=
-		"[FLAKY] test_foo.py (1 failed, 122 passed in 1.23 seconds)" {
+		"[FLAKY] test_foo.py"+
+			" (1 failed, 122 passed in 1.23 seconds * 2 trials)" {
 		t.Fatalf("unexpected summary: %s", s)
 	}
 }

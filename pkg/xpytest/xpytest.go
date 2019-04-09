@@ -63,16 +63,19 @@ func (x *Xpytest) ApplyHint(h *xpytest_proto.HintFile) error {
 		priority := i + 1
 		hint := h.GetSlowTests()[len(h.GetSlowTests())-i-1]
 		for _, tq := range x.GetTests() {
-			if tq.File == hint.Name ||
-				strings.HasSuffix(tq.File, "/"+hint.Name) {
+			if tq.GetFile() == hint.GetName() ||
+				strings.HasSuffix(tq.GetFile(), "/"+hint.GetName()) {
 				tq.Priority = int32(priority)
-				if hint.Deadline != 0 {
-					tq.Deadline = hint.Deadline
+				if hint.GetDeadline() != 0 {
+					tq.Deadline = hint.GetDeadline()
 				} else {
 					tq.Deadline = 600.0
 				}
-				if hint.Xdist != 0 {
-					tq.Xdist = hint.Xdist
+				if hint.GetXdist() != 0 {
+					tq.Xdist = hint.GetXdist()
+				}
+				if hint.GetRetry() > 0 {
+					tq.Retry = hint.GetRetry()
 				}
 			}
 		}
@@ -161,6 +164,9 @@ func (x *Xpytest) Execute(
 			pt := *x.PytestBase
 			pt.Files = []string{t.File}
 			pt.Xdist = int(t.Xdist)
+			if t.Retry != 0 {
+				pt.Retry = int(t.Retry)
+			}
 			pt.Env = []string{
 				fmt.Sprintf("CUDA_VISIBLE_DEVICES=%s", func() string {
 					s := []string{}

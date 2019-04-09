@@ -15,6 +15,9 @@ message TestQuery {
 
   // # of processes in pytest-xdist.
   int32 xdist = 4;
+
+  // # of retries.
+  int32 retry = 5;
 }
 
 message TestResult {
@@ -53,6 +56,9 @@ message HintFile {
 
     // # of processes in pytest-xdist.
     int32 xdist = 3;
+
+    // # of retries.  For flaky tests.
+    int32 retry = 4;
   }
   repeated SlowTest slow_tests = 1;
 }

@@ -45,6 +45,7 @@ func (p *Pytest) Execute(
 		} else if pr.Status == xpytest_proto.TestResult_SUCCESS {
 			finalResult.Status = xpytest_proto.TestResult_FLAKY
 		}
+		finalResult.trial = trial
 		if finalResult.Status != xpytest_proto.TestResult_FAILED {
 			break
 		}
@@ -86,6 +87,8 @@ func (p *Pytest) execute(
 type Result struct {
 	Status   xpytest_proto.TestResult_Status
 	Name     string
+	xdist    int
+	trial    int
 	duration float32
 	summary  string
 	output   string
@@ -111,19 +114,13 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 			r.Status = xpytest_proto.TestResult_SUCCESS
 		}
 	}
-	ext := ""
-	if p.Xdist > 0 {
-		ext += fmt.Sprintf(" * %d procs", p.Xdist)
-	}
+	r.xdist = p.Xdist
 	r.duration = tr.GetTime()
 	r.summary = func() string {
-		output := r.Name
 		if r.Status == xpytest_proto.TestResult_TIMEOUT {
-			output += fmt.Sprintf(" (%.0f seconds%s)", r.duration, ext)
-		} else if result != "" {
-			output += fmt.Sprintf(" (%s%s)", result, ext)
+			return fmt.Sprintf("%.0f seconds", r.duration)
 		}
-		return output
+		return fmt.Sprintf("%s", result)
 	}()
 	r.output = func() string {
 		shorten := func(s string) string {
@@ -145,7 +142,21 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 // Summary returns a one-line summary of the test result (e.g.,
 // "[SUCCESS] test_foo.py (123 passed in 4.56 seconds)").
 func (r *Result) Summary() string {
-	return fmt.Sprintf("[%s] %s", r.Status, r.summary)
+	ss := []string{}
+	if r.summary != "" {
+		ss = append(ss, r.summary)
+	}
+	if r.xdist > 0 {
+		ss = append(ss, fmt.Sprintf("%d procs", r.xdist))
+	}
+	if r.trial > 0 {
+		ss = append(ss, fmt.Sprintf("%d trials", r.trial+1))
+	}
+	s := strings.Join(ss, " * ")
+	if s != "" {
+		s = " (" + s + ")"
+	}
+	return fmt.Sprintf("[%s] %s%s", r.Status, r.Name, s)
 }
 
 // Output returns the test result.  This returns outputs from STDOUT/STDERR in
