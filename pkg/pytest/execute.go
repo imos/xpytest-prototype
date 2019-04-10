@@ -60,7 +60,8 @@ func Execute(
 
 	// Run I/O threads.
 	readAll := func(pipe io.Reader) string {
-		b, _ := ioutil.ReadAll(pipe)
+		b, err := ioutil.ReadAll(pipe)
+		fmt.Fprintf(os.Stderr, "[ERROR] failed to read from pipe: %s", err)
 		if b == nil {
 			return ""
 		}

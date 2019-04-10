@@ -117,7 +117,8 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 	r.xdist = p.Xdist
 	r.duration = tr.GetTime()
 	r.summary = func() string {
-		if r.Status == xpytest_proto.TestResult_TIMEOUT {
+		if r.Status == xpytest_proto.TestResult_TIMEOUT ||
+			r.Status == xpytest_proto.TestResult_INTERNAL {
 			return fmt.Sprintf("%.0f seconds", r.duration)
 		}
 		return fmt.Sprintf("%s", result)
