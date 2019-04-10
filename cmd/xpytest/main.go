@@ -71,7 +71,7 @@ func main() {
 		panic(fmt.Sprintf("failed to execute: %s", err))
 	}
 
-	fmt.Printf("Overall status: %s", xt.Status)
+	fmt.Printf("Overall status: %s\n", xt.Status)
 	if xt.Status != xpytest_proto.TestResult_SUCCESS &&
 		xt.Status != xpytest_proto.TestResult_FLAKY {
 		os.Exit(1)
