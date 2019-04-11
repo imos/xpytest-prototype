@@ -91,7 +91,8 @@ type Result struct {
 	trial    int
 	duration float32
 	summary  string
-	output   string
+	stdout   string
+	stderr   string
 }
 
 func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
@@ -123,20 +124,19 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 		}
 		return fmt.Sprintf("%s", result)
 	}()
-	r.output = func() string {
-		shorten := func(s string) string {
-			ss := strings.Split(s, "\n")
-			if len(ss) > 500 {
-				output := ss[0:250]
-				output = append(output,
-					fmt.Sprintf("...(%d lines skipped)...", len(ss)-500))
-				output = append(output, ss[len(ss)-250:]...)
-				return strings.Join(output, "\n")
-			}
-			return s
+	shorten := func(s string) string {
+		ss := strings.Split(s, "\n")
+		if len(ss) > 500 {
+			output := ss[0:250]
+			output = append(output,
+				fmt.Sprintf("...(%d lines skipped)...", len(ss)-500))
+			output = append(output, ss[len(ss)-250:]...)
+			return strings.Join(output, "\n")
 		}
-		return strings.TrimSpace(shorten(tr.Stdout) + "\n" + shorten(tr.Stderr))
-	}()
+		return s
+	}
+	r.stdout = shorten(tr.Stdout)
+	r.stderr = shorten(tr.Stderr)
 	return r
 }
 
@@ -164,7 +164,8 @@ func (r *Result) Summary() string {
 // addition to a one-line summary returned by Summary.
 func (r *Result) Output() string {
 	if r.Status == xpytest_proto.TestResult_SUCCESS {
-		return r.Summary()
+		return strings.TrimSpace(r.Summary() + "\n" + r.stderr)
 	}
-	return strings.TrimSpace(r.Summary() + "\n" + r.output)
+	return strings.TrimSpace(r.Summary() + "\n" +
+		strings.TrimSpace(r.stdout+"\n"+r.stderr))
 }

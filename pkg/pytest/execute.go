@@ -86,7 +86,10 @@ func Execute(
 	})
 
 	// Wait for the command.
-	cmd.Wait()
+	if err := cmd.Wait(); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to wait a command: %s", err)
+		cmd.Process.Kill()
+	}
 	close(cmdIsDone)
 	wg.Wait()
 
