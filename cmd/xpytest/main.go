@@ -23,6 +23,7 @@ var spreadsheetID = flag.String("spreadsheet_id", "", "spreadsheet ID to edit")
 var hint = flag.String("hint", "", "hint file")
 var bucket = flag.Int("bucket", 1, "number of buckets")
 var thread = flag.Int("thread", 0, "number of threads per bucket")
+var reportName = flag.String("report_name", "", "name for reporter")
 
 func main() {
 	flag.Parse()
@@ -48,6 +49,7 @@ func main() {
 		panic(fmt.Sprintf("failed to initialize reporter: %s", err))
 	}
 	if r != nil {
+		r.Log(ctx, *reportName)
 		r.Log(ctx, fmt.Sprintf("Time: %s", time.Now()))
 	}
 
