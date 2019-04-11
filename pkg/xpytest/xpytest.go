@@ -192,11 +192,6 @@ func (x *Xpytest) Execute(
 	wg.Wait()
 	close(resultChan)
 	printer.Wait()
-	if reporter != nil {
-		if err := reporter.Flush(ctx); err != nil {
-			return err
-		}
-	}
 	return nil
 }
 

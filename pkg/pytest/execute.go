@@ -103,7 +103,7 @@ func executeInternal(
 	}
 
 	// Run I/O threads.
-	readAll := func(pipe io.Reader, out *string) {
+	readAll := func(pipe io.ReadCloser, out *string) {
 		s := bufio.NewReaderSize(pipe, 128)
 		for {
 			line, err := s.ReadSlice('\n')
@@ -112,12 +112,13 @@ func executeInternal(
 			} else if err != nil && err != bufio.ErrBufferFull {
 				if err.Error() != "read |0: file already closed" {
 					fmt.Fprintf(os.Stderr,
-						"[ERROR] failed to read from pipe: %s", err)
+						"[ERROR] failed to read from pipe: %s\n", err)
 				}
 				break
 			}
 			*out += string(line)
 		}
+		pipe.Close()
 	}
 	async(func() { readAll(stdoutPipe, &result.Stdout) })
 	async(func() { readAll(stderrPipe, &result.Stderr) })
@@ -136,7 +137,7 @@ func executeInternal(
 
 	// Wait for the command.
 	if err := cmd.Wait(); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to wait a command: %s: %s\n",
+		fmt.Fprintf(os.Stderr, "[DEBUG] failed to wait a command: %s: %s\n",
 			strings.Join(args, " "), err)
 		cmd.Process.Kill()
 	}
