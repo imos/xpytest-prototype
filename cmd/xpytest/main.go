@@ -49,8 +49,11 @@ func main() {
 		panic(fmt.Sprintf("failed to initialize reporter: %s", err))
 	}
 	if r != nil {
-		r.Log(ctx, *reportName)
-		r.Log(ctx, fmt.Sprintf("Time: %s", time.Now()))
+		if *reportName != "" {
+			r.Log(ctx, *reportName)
+		} else {
+			r.Log(ctx, fmt.Sprintf("Time: %s", time.Now()))
+		}
 	}
 
 	for _, arg := range flag.Args() {
@@ -74,9 +77,10 @@ func main() {
 	}
 
 	if r != nil {
-		fmt.Fprintf(os.Stderr, "[DEBUG] flushing reporter...")
+		fmt.Fprintf(os.Stderr, "[DEBUG] flushing reporter...\n")
 		if err := r.Flush(ctx); err != nil {
-			fmt.Fprintf(os.Stderr, "[ERROR] failed to flush reporter: %s", err)
+			fmt.Fprintf(os.Stderr,
+				"[ERROR] failed to flush reporter: %s\n", err)
 		}
 	}
 
