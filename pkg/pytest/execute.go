@@ -21,7 +21,6 @@ func Execute(
 	ctx context.Context, args []string, deadline time.Duration, env []string,
 ) (*xpytest_proto.TestResult, error) {
 	startTime := time.Now()
-	// result := &xpytest_proto.TestResult{}
 
 	type executeResult struct {
 		testResult *xpytest_proto.TestResult
