@@ -68,5 +68,6 @@ func (r *sheetsReporter) Flush(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to append rows: %s", err)
 	}
+	r.values = nil
 	return nil
 }

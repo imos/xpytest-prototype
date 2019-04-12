@@ -73,6 +73,13 @@ func main() {
 		panic(fmt.Sprintf("failed to execute: %s", err))
 	}
 
+	if r != nil {
+		fmt.Fprintf(os.Stderr, "[DEBUG] flushing reporter...")
+		if err := r.Flush(ctx); err != nil {
+			fmt.Fprintf(os.Stderr, "[ERROR] failed to flush reporter: %s", err)
+		}
+	}
+
 	fmt.Printf("Overall status: %s\n", xt.Status)
 	if xt.Status != xpytest_proto.TestResult_SUCCESS &&
 		xt.Status != xpytest_proto.TestResult_FLAKY {
