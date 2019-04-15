@@ -111,8 +111,14 @@ func newPytestResult(p *Pytest, tr *xpytest_proto.TestResult) *Result {
 			result = fmt.Sprintf("%s; %.0f seconds", r.Status, r.duration)
 			r.Status = xpytest_proto.TestResult_INTERNAL
 		}
+		// pytest's message for no tests.
 		if regexp.MustCompile(
 			`^\d+ deselected in \d+(\.\d+)? seconds$`).MatchString(result) {
+			r.Status = xpytest_proto.TestResult_SUCCESS
+		}
+		// pytest-xdist's message for no tests.
+		if regexp.MustCompile(
+			`^no tests ran in \d+(\.\d+)? seconds$`).MatchString(result) {
 			r.Status = xpytest_proto.TestResult_SUCCESS
 		}
 	}
